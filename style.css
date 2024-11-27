@@ -1,0 +1,128 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  place-content: start;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.row {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+
+  &:nth-child(even) {
+    transform: rotate(180deg);
+  }
+}
+
+.pyramid {
+  --w: 150px;
+  --w-negative: calc(var(--w) * -1);
+  --w-half: calc(var(--w) / 2);
+  --w-half-negative: calc(var(--w) / 2 * -1);
+  --rotate-x: 25deg;
+  --rotate-y: -90deg;
+  --rotate-x-negative: calc(var(--rotate-x) * -1);
+  width: var(--w);
+  height: var(--w);
+  position: absolute;
+  transform-style: preserve-3d;
+  perspective: 10000px;
+
+  &.pausa {
+    animation-play-state: paused;
+  }
+
+  .side {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    transform-origin: 50% 100%;
+    --rotate-x-negative: -16.5deg;
+
+    &.side-front {
+      transform: scale(1.02, 1.04) rotateX(22deg);
+    }
+
+    &.side-bottom {
+      transform: rotateX(88deg) scaleX(1.02);
+    }
+
+    &.side-right {
+      transform: translateZ(-75px) translateX(38px) rotateY(-63deg)
+        rotateX(var(--rotate-x-negative)) scaleX(1.12);
+    }
+
+    &.side-left {
+      transform: translateZ(-75px) translateX(-38px) rotateY(63deg)
+        rotateX(var(--rotate-x-negative)) scaleX(1.12);
+    }
+  }
+
+  &:nth-child(even) {
+    top: 3px;
+    transform: rotateX(-15deg);
+    left: calc(var(--x-even) * 150px);
+
+    .side {
+      &.side-front {
+        background-color: transparent;
+      }
+      &.side-bottom {
+        background-color: oklch(51.2% 0.2782 259.84);
+        animation: changeColor 8s linear infinite alternate both;
+      }
+      &.side-left {
+        background-color: #e7e8e3;
+      }
+      &.side-right {
+        background-color: #f0f0ee;
+      }
+    }
+  }
+
+  &:nth-child(odd) {
+    top: -6px;
+    transform: rotateX(-15deg) rotate(180deg) scaleZ(-1);
+    left: calc(var(--x-odd) * 75px);
+
+    .side {
+      &.side-bottom {
+        background-color: transparent;
+      }
+      &.side-front {
+        background-color: oklch(51.2% 0.2782 259.84);
+        animation: changeColor 8s linear infinite alternate both;
+      }
+      &.side-left {
+        background-color: #e7e8e3;
+      }
+      &.side-right {
+        background-color: #f0f0ee;
+      }
+    }
+  }
+}
+
+@keyframes changeColor {
+  0% {
+    filter: hue-rotate(-359deg);
+  }
+  100% {
+    filter: hue-rotate(359deg);
+  }
+}
